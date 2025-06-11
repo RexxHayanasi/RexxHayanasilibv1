@@ -14,7 +14,7 @@ ToggleImage.ZIndex             = 1000
 ToggleImage.Parent            = CoreGui:FindFirstChild("RobloxGui") or CoreGui
 
 --// Library & Window
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/RexxHayanasi/RexxLibsV1/main/Main.lua"))()
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/RexxHayanasi/RexxLibsV1/main/main.lua"))()
 local Window = Library:CreateWindow({
     Title            = "Furinafield",
     Theme            = "Dark",
