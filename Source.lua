@@ -103,7 +103,7 @@ ToggleImage.MouseButton1Click:Connect(function()
 end)
 
 --// Library
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/RexxHayanasi/RexxLibsV1/main/Main.lua"))()
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/RexxHayanasi/RexxLibsV1/main/main.lua"))()
 local Window = Library:CreateWindow({
     Title = "Furinafield Premium",
     Theme = "Dark",
