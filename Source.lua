@@ -122,76 +122,13 @@ Window:AddParagraph({
 })
 
 ----------------------------------------------------------------------
--- DASHBOARD TAB (TAMBAHAN)
+-- DASHBOARD TAB (BIARKAN LIBRARY YANG HANDLE, TIDAK PERLU DIBUAT MANUAL DI SINI)
 ----------------------------------------------------------------------
-local function getAvatarUrl(userId)
-    return string.format("https://www.roblox.com/headshot-thumbnail/image?userId=%d&width=150&height=150&format=png", userId)
-end
-
-local DashboardTab = Window:AddTab({
+Window:AddTab({
     Title = "Dashboard",
     Section = "Main",
-    Icon = "rbxassetid://10723424646", -- lucide-layout-dashboard
+    Icon = "rbxassetid://10723424646",
 })
-
-DashboardTab:AddParagraph({
-    Title = "User Info",
-    Description = "",
-    Tab = DashboardTab
-})
-
-local playerName = LocalPlayer and LocalPlayer.Name or "Guest"
-local playerId = LocalPlayer and LocalPlayer.UserId or 1
-
-local playerAvatarImage = Instance.new("ImageLabel")
-playerAvatarImage.Name = "UserAvatar"
-playerAvatarImage.Image = getAvatarUrl(playerId)
-playerAvatarImage.Size = UDim2.new(0, 64, 0, 64)
-playerAvatarImage.Position = UDim2.new(0, 10, 0, 45)
-playerAvatarImage.BackgroundTransparency = 1
-playerAvatarImage.Parent = DashboardTab.Content
-
-local playerNameLabel = Instance.new("TextLabel")
-playerNameLabel.Text = playerName
-playerNameLabel.Font = Enum.Font.GothamBold
-playerNameLabel.TextSize = 18
-playerNameLabel.TextColor3 = Color3.fromRGB(255,255,255)
-playerNameLabel.BackgroundTransparency = 1
-playerNameLabel.Position = UDim2.new(0, 80, 0, 60)
-playerNameLabel.Size = UDim2.new(0, 200, 0, 30)
-playerNameLabel.Parent = DashboardTab.Content
-
-DashboardTab:AddParagraph({
-    Title = "Tentang Furinafield",
-    Description = "Furinafield adalah UI library premium untuk Roblox yang menghadirkan tampilan modern, fitur lengkap, dan kemudahan integrasi ke script kamu.",
-    Tab = DashboardTab
-})
-
-DashboardTab:AddParagraph({
-    Title = "Creator",
-    Description = "XyraaDeFontine",
-    Tab = DashboardTab
-})
-
-local creatorAvatarImage = Instance.new("ImageLabel")
-creatorAvatarImage.Name = "CreatorAvatar"
-creatorAvatarImage.Image = getAvatarUrl(4488332506) -- UserId XyraaDeFontine
-creatorAvatarImage.Size = UDim2.new(0, 64, 0, 64)
-creatorAvatarImage.Position = UDim2.new(0, 10, 0, 230)
-creatorAvatarImage.BackgroundTransparency = 1
-creatorAvatarImage.Parent = DashboardTab.Content
-
-local creatorNameLabel = Instance.new("TextLabel")
-creatorNameLabel.Text = "XyraaDeFontine"
-creatorNameLabel.Font = Enum.Font.GothamBold
-creatorNameLabel.TextSize = 18
-creatorNameLabel.TextColor3 = Color3.fromRGB(255,255,255)
-creatorNameLabel.BackgroundTransparency = 1
-creatorNameLabel.Position = UDim2.new(0, 80, 0, 245)
-creatorNameLabel.Size = UDim2.new(0, 200, 0, 30)
-creatorNameLabel.Parent = DashboardTab.Content
-----------------------------------------------------------------------
--- AKHIR DASHBOARD TAB
 ----------------------------------------------------------------------
 
 local ScriptTab = Window:AddTab({
@@ -220,7 +157,7 @@ Window:AddButton({
     Callback = function()
         showNotification("Furinafield", "Memuat Hitbox...", 1)
         local success, err = pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/RexxHayanasi/Script-roblox/refs/heads/main/Script/Visual/hitbox.lua"))()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/RexxHayanasi/Script-roblox/main/Script/Visual/hitbox.lua"))()
         end)
         if success then
             showNotification("Furinafield", "Hitbox berhasil dimuat!", 2)
