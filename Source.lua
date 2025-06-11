@@ -10,7 +10,7 @@ local function showNotification(title, message, duration)
     local notificationGui = Instance.new("ScreenGui")
     notificationGui.Name = "FurinaNotification"
     notificationGui.Parent = CoreGui
-    
+
     local frame = Instance.new("Frame")
     frame.Size = UDim2.new(0, 300, 0, 80)
     frame.Position = UDim2.new(1, 10, 1, -90)
@@ -18,35 +18,32 @@ local function showNotification(title, message, duration)
     frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     frame.BorderSizePixel = 0
     frame.Parent = notificationGui
-    
+
     local titleLabel = Instance.new("TextLabel")
     titleLabel.Text = title
     titleLabel.Font = Enum.Font.GothamBold
     titleLabel.TextSize = 18
-    titleLabel.TextColor3 = Color3.new(1, 1, 1)
-    titleLabel.Size = UDim2.new(1, -20, 0, 25)
-    titleLabel.Position = UDim2.new(0, 10, 0, 10)
+    titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     titleLabel.BackgroundTransparency = 1
-    titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+    titleLabel.Position = UDim2.new(0, 10, 0, 10)
+    titleLabel.Size = UDim2.new(1, -20, 0, 25)
     titleLabel.Parent = frame
-    
+
     local messageLabel = Instance.new("TextLabel")
     messageLabel.Text = message
     messageLabel.Font = Enum.Font.Gotham
-    messageLabel.TextSize = 14
-    messageLabel.TextColor3 = Color3.new(0.8, 0.8, 0.8)
-    messageLabel.Size = UDim2.new(1, -20, 1, -40)
-    messageLabel.Position = UDim2.new(0, 10, 0, 35)
+    messageLabel.TextSize = 16
+    messageLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
     messageLabel.BackgroundTransparency = 1
-    messageLabel.TextXAlignment = Enum.TextXAlignment.Left
+    messageLabel.Position = UDim2.new(0, 10, 0, 40)
+    messageLabel.Size = UDim2.new(1, -20, 0, 30)
+    messageLabel.TextWrapped = true
     messageLabel.Parent = frame
-    
-    -- Animasi masuk
+
     frame.Position = UDim2.new(1, 10, 1, 100)
     local tweenIn = TweenService:Create(frame, TweenInfo.new(0.5), {Position = UDim2.new(1, 10, 1, -90)})
     tweenIn:Play()
-    
-    -- Animasi keluar setelah durasi
+
     task.delay(duration, function()
         local tweenOut = TweenService:Create(frame, TweenInfo.new(0.5), {Position = UDim2.new(1, 10, 1, 100)})
         tweenOut:Play()
@@ -56,41 +53,25 @@ local function showNotification(title, message, duration)
     end)
 end
 
--- Tampilkan notifikasi saat memulai
 showNotification("Furinafield", "Memuat antarmuka...", 2)
 
 local ToggleImage = Instance.new("ImageButton")
 ToggleImage.Name = "FurinafieldToggle"
 ToggleImage.Image = "https://files.catbox.moe/q1nl5g.jpg"
-ToggleImage.Size = UDim2.new(0, 50, 0, 50) -- Ukuran diperbesar
-ToggleImage.Position = UDim2.new(0, 20, 0, 20) -- Posisi disesuaikan
+ToggleImage.Size = UDim2.new(0, 45, 0, 45)
+ToggleImage.Position = UDim2.new(0, 20, 0, 250)
 ToggleImage.BackgroundTransparency = 1
-ToggleImage.ZIndex = 1000
-ToggleImage.AnchorPoint = Vector2.new(0, 0)
-ToggleImage.Visible = true
+ToggleImage.ZIndex = 50
 
--- Efek hover pada tombol
-ToggleImage.MouseEnter:Connect(function()
-    TweenService:Create(ToggleImage, TweenInfo.new(0.2), {Size = UDim2.new(0, 55, 0, 55)}):Play()
-end)
-
-ToggleImage.MouseLeave:Connect(function()
-    TweenService:Create(ToggleImage, TweenInfo.new(0.2), {Size = UDim2.new(0, 50, 0, 50)}):Play()
-end)
-
--- Parent image toggle ke PlayerGui jika ada (support mobile)
 local function getSafeParent()
-    if RunService:IsStudio() or RunService:IsClient() then
-        if LocalPlayer:FindFirstChild("PlayerGui") then
-            return LocalPlayer:WaitForChild("PlayerGui")
-        end
+    if LocalPlayer and LocalPlayer:FindFirstChild("PlayerGui") then
+        return LocalPlayer:WaitForChild("PlayerGui")
     end
     return CoreGui
 end
 
 ToggleImage.Parent = getSafeParent()
 
--- Image toggle logic
 local UIVisible = true
 ToggleImage.MouseButton1Click:Connect(function()
     UIVisible = not UIVisible
@@ -107,43 +88,13 @@ local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/RexxH
 local Window = Library:CreateWindow({
     Title = "Furinafield Premium",
     Theme = "Dark",
-    Size = UDim2.fromOffset(600, 400), -- Ukuran diperbesar
-    Transparency = 0.15, -- Lebih transparan
-    Blurring = true,
-    MinimizeKeybind = Enum.KeyCode.LeftAlt,
 })
 
---// Themes
 local Themes = {
-    Light = {
-        Primary = Color3.fromRGB(232, 232, 232),
-        Secondary = Color3.fromRGB(255, 255, 255),
-        Component = Color3.fromRGB(245, 245, 245),
-        Interactables = Color3.fromRGB(235, 235, 235),
-        Tab = Color3.fromRGB(50, 50, 50),
-        Title = Color3.fromRGB(0, 0, 0),
-        Description = Color3.fromRGB(100, 100, 100),
-        Shadow = Color3.fromRGB(255, 255, 255),
-        Outline = Color3.fromRGB(210, 210, 210),
-        Icon = Color3.fromRGB(100, 100, 100),
-    },
     Dark = {
-        Primary = Color3.fromRGB(30, 30, 30),
-        Secondary = Color3.fromRGB(35, 35, 35),
-        Component = Color3.fromRGB(40, 40, 40),
-        Interactables = Color3.fromRGB(45, 45, 45),
-        Tab = Color3.fromRGB(200, 200, 200),
-        Title = Color3.fromRGB(240,240,240),
-        Description = Color3.fromRGB(200,200,200),
-        Shadow = Color3.fromRGB(0, 0, 0),
-        Outline = Color3.fromRGB(40, 40, 40),
-        Icon = Color3.fromRGB(220, 220, 220),
-    },
-    Void = {
-        Primary = Color3.fromRGB(15, 15, 15),
-        Secondary = Color3.fromRGB(20, 20, 20),
-        Component = Color3.fromRGB(25, 25, 25),
-        Interactables = Color3.fromRGB(30, 30, 30),
+        Primary = Color3.fromRGB(45, 45, 65),
+        Secondary = Color3.fromRGB(35, 35, 55),
+        Interactables = Color3.fromRGB(60, 60, 90),
         Tab = Color3.fromRGB(200, 200, 200),
         Title = Color3.fromRGB(240,240,240),
         Description = Color3.fromRGB(200,200,200),
@@ -154,13 +105,11 @@ local Themes = {
 }
 Window:SetTheme(Themes.Dark)
 
---// Tab Sections
 Window:AddTabSection({ Name = "Main", Order = 1 })
 Window:AddTabSection({ Name = "Script", Order = 2 })
 Window:AddTabSection({ Name = "Visual", Order = 3 })
 Window:AddTabSection({ Name = "Settings", Order = 4 })
 
---// MAIN Tab
 local Main = Window:AddTab({
     Title = "Components",
     Section = "Main",
@@ -172,31 +121,93 @@ Window:AddParagraph({
     Tab = Main
 })
 
---// SCRIPT Tab
+----------------------------------------------------------------------
+-- DASHBOARD TAB (TAMBAHAN)
+----------------------------------------------------------------------
+local function getAvatarUrl(userId)
+    return string.format("https://www.roblox.com/headshot-thumbnail/image?userId=%d&width=150&height=150&format=png", userId)
+end
+
+local DashboardTab = Window:AddTab({
+    Title = "Dashboard",
+    Section = "Main",
+    Icon = "rbxassetid://10723424646", -- lucide-layout-dashboard
+})
+
+DashboardTab:AddParagraph({
+    Title = "User Info",
+    Description = "",
+    Tab = DashboardTab
+})
+
+local playerName = LocalPlayer and LocalPlayer.Name or "Guest"
+local playerId = LocalPlayer and LocalPlayer.UserId or 1
+
+local playerAvatarImage = Instance.new("ImageLabel")
+playerAvatarImage.Name = "UserAvatar"
+playerAvatarImage.Image = getAvatarUrl(playerId)
+playerAvatarImage.Size = UDim2.new(0, 64, 0, 64)
+playerAvatarImage.Position = UDim2.new(0, 10, 0, 45)
+playerAvatarImage.BackgroundTransparency = 1
+playerAvatarImage.Parent = DashboardTab.Content
+
+local playerNameLabel = Instance.new("TextLabel")
+playerNameLabel.Text = playerName
+playerNameLabel.Font = Enum.Font.GothamBold
+playerNameLabel.TextSize = 18
+playerNameLabel.TextColor3 = Color3.fromRGB(255,255,255)
+playerNameLabel.BackgroundTransparency = 1
+playerNameLabel.Position = UDim2.new(0, 80, 0, 60)
+playerNameLabel.Size = UDim2.new(0, 200, 0, 30)
+playerNameLabel.Parent = DashboardTab.Content
+
+DashboardTab:AddParagraph({
+    Title = "Tentang Furinafield",
+    Description = "Furinafield adalah UI library premium untuk Roblox yang menghadirkan tampilan modern, fitur lengkap, dan kemudahan integrasi ke script kamu.",
+    Tab = DashboardTab
+})
+
+DashboardTab:AddParagraph({
+    Title = "Creator",
+    Description = "XyraaDeFontine",
+    Tab = DashboardTab
+})
+
+local creatorAvatarImage = Instance.new("ImageLabel")
+creatorAvatarImage.Name = "CreatorAvatar"
+creatorAvatarImage.Image = getAvatarUrl(4488332506) -- UserId XyraaDeFontine
+creatorAvatarImage.Size = UDim2.new(0, 64, 0, 64)
+creatorAvatarImage.Position = UDim2.new(0, 10, 0, 230)
+creatorAvatarImage.BackgroundTransparency = 1
+creatorAvatarImage.Parent = DashboardTab.Content
+
+local creatorNameLabel = Instance.new("TextLabel")
+creatorNameLabel.Text = "XyraaDeFontine"
+creatorNameLabel.Font = Enum.Font.GothamBold
+creatorNameLabel.TextSize = 18
+creatorNameLabel.TextColor3 = Color3.fromRGB(255,255,255)
+creatorNameLabel.BackgroundTransparency = 1
+creatorNameLabel.Position = UDim2.new(0, 80, 0, 245)
+creatorNameLabel.Size = UDim2.new(0, 200, 0, 30)
+creatorNameLabel.Parent = DashboardTab.Content
+----------------------------------------------------------------------
+-- AKHIR DASHBOARD TAB
+----------------------------------------------------------------------
+
 local ScriptTab = Window:AddTab({
     Title = "Script",
     Section = "Script",
-    Icon = "rbxassetid://11963373994"
+    Icon = "rbxassetid://11372957192"
 })
 Window:AddButton({
-    Title = "Dead Rails",
-    Description = "Load Dead Rails game script",
+    Title = "Contoh Script",
+    Description = "Menampilkan script contoh",
     Tab = ScriptTab,
     Callback = function()
-        showNotification("Furinafield", "Memuat Dead Rails...", 1)
-        local success, err = pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/RexxHayanasi/Script-roblox/refs/heads/main/Script/Game/Dead-Rails.lua"))()
-        end)
-        if success then
-            showNotification("Furinafield", "Dead Rails berhasil dimuat!", 2)
-        else
-            showNotification("Furinafield", "Gagal memuat Dead Rails", 2)
-            warn("Error loading Dead Rails:", err)
-        end
+        showNotification("Furinafield", "Contoh script ditampilkan!", 1)
     end
 })
 
---// VISUAL Tab (di bawah Script)
 local VisualTab = Window:AddTab({
     Title = "Visual",
     Section = "Visual",
@@ -220,7 +231,6 @@ Window:AddButton({
     end
 })
 
---// SETTINGS Tab
 local Settings = Window:AddTab({
     Title = "Settings",
     Section = "Settings",
@@ -228,34 +238,24 @@ local Settings = Window:AddTab({
 })
 Window:AddKeybind({
     Title = "Minimize Keybind",
-    Description = "Set the keybind for Minimizing",
+    Description = "Toggle UI",
     Tab = Settings,
-    Callback = function(Key)
-        Window:SetSetting("Keybind", Key)
-        showNotification("Furinafield", "Keybind diperbarui: "..tostring(Key), 1)
-    end
-})
-Window:AddDropdown({
-    Title = "Set Theme",
-    Description = "Set the theme of the library!",
-    Tab = Settings,
-    Options = {
-        ["Light Mode"] = "Light",
-        ["Dark Mode"] = "Dark",
-        ["Extra Dark"] = "Void",
-    },
-    Callback = function(Theme)
-        Window:SetTheme(Themes[Theme])
-        showNotification("Furinafield", "Tema diubah ke: "..Theme, 1)
+    Default = Enum.KeyCode.RightControl,
+    Callback = function()
+        UIVisible = not UIVisible
+        for _, v in ipairs(getSafeParent():GetChildren()) do
+            if v:IsA("ScreenGui") and v.Name:find("Furinafield") then
+                v.Enabled = UIVisible
+            end
+        end
+        showNotification("Furinafield", UIVisible and "UI Ditampilkan" or "UI Disembunyikan", 1)
     end
 })
 Window:AddToggle({
-    Title = "UI Blur",
-    Description = "Toggle UI blur effect",
-    Default = true,
+    Title = "Blur Background",
+    Description = "Aktifkan blur pada background UI",
     Tab = Settings,
     Callback = function(Boolean)
-        Window:SetSetting("Blur", Boolean)
         showNotification("Furinafield", "Blur "..(Boolean and "diaktifkan" or "dinonaktifkan"), 1)
     end
 })
@@ -271,5 +271,4 @@ Window:AddSlider({
     end
 })
 
--- Notifikasi saat UI selesai dimuat
 showNotification("Furinafield", "Antarmuka siap digunakan!", 2)
