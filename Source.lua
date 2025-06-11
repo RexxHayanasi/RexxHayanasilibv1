@@ -1,6 +1,7 @@
 --// Auto Toggle UI Button (Image)
 local CoreGui = game:GetService("CoreGui")
 local UserInputService = game:GetService("UserInputService")
+
 local ToggleImage = Instance.new("ImageButton")
 ToggleImage.Name = "FurinafieldToggle"
 ToggleImage.Image = "https://files.catbox.moe/q1nl5g.jpg"
@@ -13,15 +14,11 @@ ToggleImage.Parent = CoreGui:FindFirstChild("RobloxGui") or CoreGui
 local UIVisible = true
 ToggleImage.MouseButton1Click:Connect(function()
     UIVisible = not UIVisible
-    for _, v in ipairs(CoreGui:GetChildren()) do
-        if v.Name:find("Furinafield") then
-            v.Enabled = UIVisible
-        end
-    end
+    Window:Toggle(UIVisible)
 end)
 
 --// Library
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/RexxHayanasi/RexxLibsV1/main/Main.lua"))()
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/RexxHayanasi/RexxLibsV1/main/main.lua"))()
 local Window = Library:CreateWindow({
     Title = "Furinafield",
     Theme = "Dark",
@@ -31,7 +28,7 @@ local Window = Library:CreateWindow({
     MinimizeKeybind = Enum.KeyCode.LeftAlt,
 })
 
--- Themes
+--// Themes
 local Themes = {
     Light = {
         Primary = Color3.fromRGB(232, 232, 232),
@@ -51,8 +48,8 @@ local Themes = {
         Component = Color3.fromRGB(40, 40, 40),
         Interactables = Color3.fromRGB(45, 45, 45),
         Tab = Color3.fromRGB(200, 200, 200),
-        Title = Color3.fromRGB(240,240,240),
-        Description = Color3.fromRGB(200,200,200),
+        Title = Color3.fromRGB(240, 240, 240),
+        Description = Color3.fromRGB(200, 200, 200),
         Shadow = Color3.fromRGB(0, 0, 0),
         Outline = Color3.fromRGB(40, 40, 40),
         Icon = Color3.fromRGB(220, 220, 220),
@@ -63,8 +60,8 @@ local Themes = {
         Component = Color3.fromRGB(25, 25, 25),
         Interactables = Color3.fromRGB(30, 30, 30),
         Tab = Color3.fromRGB(200, 200, 200),
-        Title = Color3.fromRGB(240,240,240),
-        Description = Color3.fromRGB(200,200,200),
+        Title = Color3.fromRGB(240, 240, 240),
+        Description = Color3.fromRGB(200, 200, 200),
         Shadow = Color3.fromRGB(0, 0, 0),
         Outline = Color3.fromRGB(40, 40, 40),
         Icon = Color3.fromRGB(220, 220, 220),
@@ -72,21 +69,25 @@ local Themes = {
 }
 Window:SetTheme(Themes.Dark)
 
--- Tab Sections
+--// Tab Sections
 Window:AddTabSection({ Name = "Main", Order = 1 })
 Window:AddTabSection({ Name = "Script", Order = 2 })
 Window:AddTabSection({ Name = "Visual", Order = 3 })
 Window:AddTabSection({ Name = "Settings", Order = 4 })
 
--- MAIN Tab
+--// MAIN Tab
 local Main = Window:AddTab({
     Title = "Components",
     Section = "Main",
     Icon = "rbxassetid://11963373994"
 })
-Window:AddParagraph({ Title = "Welcome", Description = "Furinafield Hub", Tab = Main })
+Window:AddParagraph({
+    Title = "Welcome",
+    Description = "Furinafield Hub",
+    Tab = Main
+})
 
--- SCRIPT Tab
+--// SCRIPT Tab
 local ScriptTab = Window:AddTab({
     Title = "Script",
     Section = "Script",
@@ -101,7 +102,7 @@ Window:AddButton({
     end
 })
 
--- VISUAL Tab (di bawah Script)
+--// VISUAL Tab
 local VisualTab = Window:AddTab({
     Title = "Visual",
     Section = "Visual",
@@ -116,7 +117,7 @@ Window:AddButton({
     end
 })
 
--- SETTINGS Tab
+--// SETTINGS Tab
 local Settings = Window:AddTab({
     Title = "Settings",
     Section = "Settings",
