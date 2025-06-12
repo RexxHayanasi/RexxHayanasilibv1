@@ -531,6 +531,142 @@ function Library:CreateWindow(Settings: { Title: string, Size: UDim2, Transparen
 		})
 	end
 
+	function Window:AddCard(settings)
+    local cardExample = self.Components:FindFirstChild("CardExample") or Instance.new("Frame")
+    
+    local card = cardExample:Clone()
+    card.Name = "Card"
+    card.Visible = true
+    
+    -- Style card
+    card.BackgroundColor3 = Theme.Component
+    card.BackgroundTransparency = 0.1
+    
+    -- Add image if provided
+    if settings.Image then
+        local img = Instance.new("ImageLabel")
+        img.Image = settings.Image
+        img.Size = settings.ImageSize or UDim2.fromOffset(80, 80)
+        img.Position = UDim2.new(0, 15, 0.5, -40)
+        img.BackgroundTransparency = 1
+        img.Parent = card
+    end
+    
+    -- Add labels
+    local title = Instance.new("TextLabel")
+    title.Text = settings.Title
+    title.TextColor3 = Theme.Title
+    title.Font = Enum.Font.GothamBold
+    title.Parent = card
+    
+    local desc = Instance.new("TextLabel") 
+    desc.Text = settings.Description
+    desc.TextColor3 = Theme.Description
+    desc.Parent = card
+    
+    card.Parent = settings.Tab
+    return card
+end
+
+	function Window:AddFolder(settings)
+    local folderExample = self.Components:FindFirstChild("FolderExample") or Instance.new("Frame")
+    
+    local folder = folderExample:Clone()
+    folder.Name = settings.Title
+    folder.Visible = true
+    
+    -- Style folder
+    folder.BackgroundColor3 = Theme.Interactables
+    
+    -- Add toggle arrow
+    local arrow = Instance.new("ImageLabel")
+    arrow.Image = "rbxassetid://3926305904" -- Chevron icon
+    arrow.Parent = folder
+    
+    -- Content container
+    local content = Instance.new("Frame")
+    content.Name = "Content"
+    content.Parent = folder
+    
+    -- Toggle functionality
+    local isOpen = settings.Default or true
+    folder.MouseButton1Click:Connect(function()
+        isOpen = not isOpen
+        content.Visible = isOpen
+        Tween(arrow, 0.2, {Rotation = isOpen and 90 or 0})
+    end)
+    
+    folder.Parent = settings.Tab
+    return {
+        AddButton = function(self, btnSettings)
+            btnSettings.Tab = content
+            return Window:AddButton(btnSettings)
+        end
+    }
+end
+
+	function Window:CreateUpdatableText(settings)
+    local container = Instance.new("Frame")
+    local textLabel = Instance.new("TextLabel")
+    
+    textLabel.Text = settings.InitialText or ""
+    textLabel.Parent = container
+    container.Parent = settings.Tab
+    
+    return {
+        Set = function(self, newText)
+            textLabel.Text = newText
+        end
+    }
+end
+
+	function Window:MakeResizable()
+    local resizeHandle = Instance.new("Frame")
+    resizeHandle.Size = UDim2.new(1, 0, 0, 5)
+    resizeHandle.Position = UDim2.new(0, 0, 1, -5)
+    resizeHandle.BackgroundTransparency = 0.8
+    resizeHandle.Parent = self.MainFrame
+    
+    local isResizing = false
+    local startPos
+    
+    resizeHandle.MouseButton1Down:Connect(function()
+        isResizing = true
+        startPos = UserInputService:GetMouseLocation()
+    end)
+    
+    UserInputService.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            isResizing = false
+        end
+    end)
+    
+    UserInputService.InputChanged:Connect(function(input)
+        if isResizing and input.UserInputType == Enum.UserInputType.MouseMovement then
+            local newSize = UserInputService:GetMouseLocation() - startPos
+            self.MainFrame.Size = UDim2.new(
+                0, math.clamp(self.MainFrame.AbsoluteSize.X + newSize.X, 400, 1200),
+                0, math.clamp(self.MainFrame.AbsoluteSize.Y + newSize.Y, 300, 800)
+            )
+        end
+    end)
+end
+
+	function Window:CreateUIToggle()
+    local toggle = Instance.new("ImageButton")
+    toggle.Image = "https://files.catbox.moe/q1nl5g.jpg"
+    toggle.Size = UDim2.new(0, 50, 0, 50)
+    toggle.BackgroundTransparency = 1
+    toggle.ZIndex = 999
+    
+    -- Position at bottom left
+    toggle.AnchorPoint = Vector2.new(0, 1)
+    toggle.Position = UDim2.new(0, 20, 1, -20)
+    toggle.Parent = game.CoreGui
+    
+    return toggle
+end
+
 	function Options:AddInput(Settings: { Title: string, Description: string, Tab: Instance, Callback: any }) 
 		local Input = Clone(Components["Input"]);
 		local Title, Description = Options:GetLabels(Input);
@@ -939,6 +1075,14 @@ function Library:CreateWindow(Settings: { Title: string, Size: UDim2, Transparen
 			end
 		end
 	end
+
+	local stats = Window:CreateUpdatableText({
+    Tab = DashboardTab,
+    InitialText = "Loading stats..."
+})
+
+stats:Set("New updated text")
+
 
 	--// Changing Settings
 
