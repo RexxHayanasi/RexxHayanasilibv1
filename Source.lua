@@ -60,8 +60,106 @@ local function getSafeParent()
     return CoreGui
 end
 
---// Library
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/RexxHayanasi/RexxLibsV1/main/Main.lua"))()
+--// LIBRARY AUTO-GENERATE COMPONENTS
+local function EnsureComponents(Screen)
+    local Components = Screen:FindFirstChild("Components")
+    if not Components then
+        Components = Instance.new("Folder")
+        Components.Name = "Components"
+        Components.Parent = Screen
+    end
+
+    -- Template minimal agar UI tidak blank
+    local function textLabel(name)
+        local l = Instance.new("TextLabel")
+        l.Name = name
+        l.Size = UDim2.new(1, 0, 0, 24)
+        l.BackgroundTransparency = 1
+        l.Text = name
+        l.TextColor3 = Color3.fromRGB(220, 220, 220)
+        return l
+    end
+    local function textButton(name)
+        local b = Instance.new("TextButton")
+        b.Name = name
+        b.Size = UDim2.new(1, 0, 0, 32)
+        b.BackgroundTransparency = 0.1
+        b.Text = name
+        b.TextColor3 = Color3.fromRGB(210, 210, 255)
+        return b
+    end
+    local function frame(name)
+        local f = Instance.new("Frame")
+        f.Name = name
+        f.Size = UDim2.new(1, 0, 0, 32)
+        f.BackgroundTransparency = 0.2
+        return f
+    end
+    local function canvasGroup(name)
+        local c = Instance.new("CanvasGroup")
+        c.Name = name
+        c.Size = UDim2.new(1, 0, 1, 0)
+        c.BackgroundTransparency = 0.2
+        return c
+    end
+
+    local templates = {
+        MainExample = canvasGroup("MainExample"),
+        TabButtonExample = textButton("TabButtonExample"),
+        SectionExample = textLabel("SectionExample"),
+        Button = textButton("Button"),
+        Paragraph = frame("Paragraph"),
+        Notification = canvasGroup("Notification"),
+        DropdownExample = frame("DropdownExample"),
+        DropdownButtonExample = textButton("DropdownButtonExample"),
+        Toggle = frame("Toggle"),
+        Input = frame("Input"),
+        Keybind = frame("Keybind"),
+        Slider = frame("Slider"),
+    }
+
+    for name, instance in pairs(templates) do
+        if not Components:FindFirstChild(name) then
+            instance.Parent = Components
+        end
+    end
+end
+
+--// Library: LOAD & PASTIKAN COMPONENTS ADA (auto generate jika tidak ada)
+local function getLibrary()
+    local MainLibUrl = "https://raw.githubusercontent.com/RexxHayanasi/RexxLibsV1/main/Main.lua"
+    local raw = game:HttpGet(MainLibUrl)
+    local Library = loadstring(raw)()
+
+    -- Cari Screen (ScreenGui) di CoreGui atau PlayerGui
+    local Screen = nil
+    for _, gui in ipairs(game.CoreGui:GetChildren()) do
+        if gui:IsA("ScreenGui") and gui:FindFirstChild("Components") then
+            Screen = gui
+            break
+        end
+    end
+    if not Screen and LocalPlayer and LocalPlayer:FindFirstChild("PlayerGui") then
+        for _, gui in ipairs(LocalPlayer.PlayerGui:GetChildren()) do
+            if gui:IsA("ScreenGui") and gui:FindFirstChild("Components") then
+                Screen = gui
+                break
+            end
+        end
+    end
+
+    -- Jika tidak ada, buat Screen baru & generate komponen
+    if not Screen then
+        Screen = Instance.new("ScreenGui")
+        Screen.Name = "FurinafieldScreen"
+        Screen.Parent = getSafeParent()
+    end
+    EnsureComponents(Screen)
+    return Library
+end
+
+local Library = getLibrary()
+
 local defaultSize = UDim2.new(0, 600, 0, 400)
 local maximizedSize = UDim2.new(0.8, 0, 0.8, 0)
 local Window = Library:CreateWindow({
@@ -86,20 +184,18 @@ local Themes = {
 }
 Window:SetTheme(Themes.Dark)
 
--- Pastikan nama section dan section pada tab SAMA PERSIS!
+-- Section dan Tab
 Window:AddTabSection({ Name = "Dashboard", Order = 1 })
 Window:AddTabSection({ Name = "Script", Order = 2 })
 Window:AddTabSection({ Name = "Visual", Order = 3 })
 Window:AddTabSection({ Name = "Settings", Order = 4 })
 
--- Dashboard Tab (library auto mengisi)
 local DashboardTab = Window:AddTab({
     Title = "Dashboard",
     Section = "Dashboard",
     Icon = "rbxassetid://10723424646",
 })
 
--- Script Tab
 local ScriptTab = Window:AddTab({
     Title = "Script",
     Section = "Script",
@@ -128,7 +224,6 @@ Window:AddButton({
     end
 })
 
--- Visual Tab
 local VisualTab = Window:AddTab({
     Title = "Visual",
     Section = "Visual",
@@ -206,7 +301,6 @@ ToggleImage.MouseButton1Click:Connect(function()
     showNotification("Furinafield", UIVisible and "UI Ditampilkan" or "UI Disembunyikan", 1)
 end)
 
--- Settings Tab
 local SettingsTab = Window:AddTab({
     Title = "Settings",
     Section = "Settings",
