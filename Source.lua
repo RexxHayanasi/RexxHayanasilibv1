@@ -86,23 +86,29 @@ local Themes = {
 }
 Window:SetTheme(Themes.Dark)
 
-Window:AddTabSection({ Name = "Main", Order = 1 })
+-- Pastikan nama section dan section pada tab SAMA PERSIS!
+Window:AddTabSection({ Name = "Dashboard", Order = 1 })
 Window:AddTabSection({ Name = "Script", Order = 2 })
 Window:AddTabSection({ Name = "Visual", Order = 3 })
 Window:AddTabSection({ Name = "Settings", Order = 4 })
 
--- Dashboard Tab (library akan auto mengisi)
-Window:AddTab({
+-- Dashboard Tab (library auto mengisi)
+local DashboardTab = Window:AddTab({
     Title = "Dashboard",
-    Section = "Main",
+    Section = "Dashboard",
     Icon = "rbxassetid://10723424646",
 })
 
--- Script Tab (dibawah Dashboard)
+-- Script Tab
 local ScriptTab = Window:AddTab({
     Title = "Script",
     Section = "Script",
     Icon = "rbxassetid://11372957192"
+})
+Window:AddParagraph({
+    Title = "Info",
+    Description = "Tab untuk eksekusi script game.",
+    Tab = ScriptTab
 })
 Window:AddButton({
     Title = "Dead Rails",
@@ -122,11 +128,16 @@ Window:AddButton({
     end
 })
 
--- Visual Tab (dibawah Script)
+-- Visual Tab
 local VisualTab = Window:AddTab({
     Title = "Visual",
     Section = "Visual",
     Icon = "rbxassetid://11963373994"
+})
+Window:AddParagraph({
+    Title = "Info",
+    Description = "Tab visual untuk script Hitbox.",
+    Tab = VisualTab
 })
 Window:AddButton({
     Title = "Hitbox (Auto Inject)",
@@ -196,15 +207,20 @@ ToggleImage.MouseButton1Click:Connect(function()
 end)
 
 -- Settings Tab
-local Settings = Window:AddTab({
+local SettingsTab = Window:AddTab({
     Title = "Settings",
     Section = "Settings",
     Icon = "rbxassetid://11293977610",
 })
+Window:AddParagraph({
+    Title = "Pengaturan",
+    Description = "Atur fitur UI di sini.",
+    Tab = SettingsTab
+})
 Window:AddKeybind({
     Title = "Minimize Keybind",
     Description = "Toggle UI",
-    Tab = Settings,
+    Tab = SettingsTab,
     Default = Enum.KeyCode.RightControl,
     Callback = function()
         UIVisible = not UIVisible
@@ -219,7 +235,7 @@ Window:AddKeybind({
 Window:AddToggle({
     Title = "Blur Background",
     Description = "Aktifkan blur pada background UI",
-    Tab = Settings,
+    Tab = SettingsTab,
     Callback = function(Boolean)
         showNotification("Furinafield", "Blur "..(Boolean and "diaktifkan" or "dinonaktifkan"), 1)
     end
@@ -227,7 +243,7 @@ Window:AddToggle({
 Window:AddSlider({
     Title = "UI Transparency",
     Description = "Adjust UI transparency",
-    Tab = Settings,
+    Tab = SettingsTab,
     AllowDecimals = true,
     MaxValue = 1,
     Callback = function(Amount)
